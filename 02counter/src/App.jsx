@@ -8,8 +8,13 @@ function App() {
   //let counter=15
   const addValue=()=>{
     if(counter<20){
-    counter=counter+1
-    setCounter(counter)//propagates the changes
+    //setCounter(counter+1)
+    //propagates the changes
+    // setCounter(counter+1)//inka batch banega aur ek hi counter pe kaam krenge
+    // setCounter(counter+1)//
+    // setCounter(counter+1)//
+    setCounter((prevcounter)=>prevcounter+1)
+    setCounter((counter)=>counter+1)
     console.log("value added" , counter)
     }
     else{
