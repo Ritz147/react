@@ -10,12 +10,19 @@ function App() {
   const addTodo=(todo)=>{
     setTodos((prev)=>[...prev,{id:Date.now(),...todo}])
   }
-  const updateTodo=(id,todo)=>{
-    setTodos((prev)=>prev.map((prevTodo)=>(prevTodo.id===id)?todo:prevTodo))
+  const updateTodo=(id,updatedTodo)=>{
+    setTodos((prev) => prev.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo)));
   }
-  const deleteTodo=(id)=>{
-    setTodos((prev)=>prev.filter((todo)=>todo.id!==id))
-  }
+  const deleteTodo = (id) => {
+    console.log("Deleting todo with id:", id);
+    console.log("Previous todos:",todos)
+    setTodos((prev) => {
+        const newTodos = prev.filter((todo) => todo.id !== id);
+        console.log("Updated todos:", newTodos);
+        return newTodos;
+    });
+};
+
   const toggleComplete=(id)=>
     {
       setTodos((prev)=>prev.map((prevTodo)=>prevTodo.id===id?{...prevTodo,completed:!prevTodo.completed}:prevTodo))
@@ -25,10 +32,10 @@ function App() {
     if(todos && todos.length>0){
       setTodos(todos)
     }
-  },[todos])//jab tak hum react me hai hum local storage directly access kar skte hain// hum get item krenge toh hume string me value milegi but hume chahiye JSON mei
+  },[setTodos])//jab tak hum react me hai hum local storage directly access kar skte hain// hum get item krenge toh hume string me value milegi but hume chahiye JSON mei
   useEffect(()=>{
     localStorage.setItem("todos",JSON.stringify(todos))
-  },[todos])
+  },[setTodos])
   return (
     <TodoProvider value={{todos,addTodo,updateTodo,deleteTodo,toggleComplete}}>
       <div className="bg-[#172842] min-h-screen py-8">

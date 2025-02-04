@@ -1,4 +1,4 @@
-import React,{ useState}from "react";
+import React,{ useState,useEffect}from "react";
 import { useTodo } from "../context";
 function TodoItem({todo}){
     const [isTodoEditable,setIsTodoEditable]=useState(false)
@@ -7,9 +7,13 @@ function TodoItem({todo}){
     const editTodo=()=>{
         updateTodo(todo.id,{...todo,todo:todoMsg})
     }
-    const toggleCompleted=()=>{
-        toggleComplete(todo.id)
-    }
+    const toggleCompleted = () => {
+        setIsTodoEditable(false); // Ensure edit mode is turned off when completing
+        toggleComplete(todo.id);
+    };
+    useEffect(() => {
+        setTodoMsg(todo.todo);
+    }, [todo.todo]);
     return (
         <div
             className={`flex border border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-sm shadow-white/50 duration-300  text-black ${
@@ -35,11 +39,11 @@ function TodoItem({todo}){
             <button
                 className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0 disabled:opacity-50"
                 onClick={() => {
-                    if (todo.completed) return;
-
+                    if (todo.completed) return; // Prevent opening edit mode if completed
                     if (isTodoEditable) {
                         editTodo();
-                    } else setIsTodoEditable((prev) => !prev);
+                    } 
+                    setIsTodoEditable((prev) => !prev);
                 }}
                 disabled={todo.completed}
             >
@@ -48,7 +52,10 @@ function TodoItem({todo}){
             {/* Delete Todo Button */}
             <button
                 className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
-                onClick={() => deleteTodo(todo.id)}
+                onClick={() => {
+                    console.log(todo)
+                    deleteTodo(todo.id)
+                }}
             >
                 ❌
             </button>
